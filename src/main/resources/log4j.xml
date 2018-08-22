@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/' >
+
+	<!-- 控制台输出 -->
+    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+    	<!-- 输出日志样式布局 -->
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss:SSS} %-5p [%t] %C:%M - %m%n" />
+        </layout>
+    </appender>
+    
+	<!-- 所有日志文件输出，到达100MB产生新的文件，最多100个 -->
+    <appender name="ALL-FILE" class="org.apache.log4j.RollingFileAppender">
+    	<!-- 文件位置 -->
+        <param name="File" value="./logs/all/sys-all-log.log" />
+        <!-- 最大生成文件个数（默认1） -->  
+        <param name="MaxBackupIndex" value="100" />
+        <!-- 一个文件最大大小（默认10MB） -->
+        <param name="MaxFileSize" value="100MB" />
+        <!-- 输出日志样式布局 -->
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss:SSS} %-5p [%t] %C:%M - %m%n" />
+        </layout>
+    </appender>
+    
+   	<!-- 错误日志文件输出，每天生成一个新的文件 -->
+    <appender name="ERROR-FILE" class="org.apache.log4j.DailyRollingFileAppender">
+    	<!-- 文件位置 -->
+        <param name="File" value="./logs/error/sys-error-log.log" />
+        <!-- 前一天文件的后缀 -->
+        <param name="DatePattern" value="'.'yyyy-MM-dd'.log'" />
+        <!-- 输出日志样式布局 -->
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss:SSS} %-5p [%t] %C:%M - %m%n" />
+        </layout>
+        <!-- 过滤器设置输出的级别-->     
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">     
+            <param name="levelMin" value="error" />     
+            <param name="levelMax" value="error" />     
+            <param name="AcceptOnMatch" value="true" />     
+        </filter>     
+    </appender>
+    
+   	<!-- 日志策略 -->
+    <category name="org.hibernate">
+        <priority value="debug" />
+    </category>
+    <category name="java.sql">
+        <priority value="debug" />
+    </category>
+
+    <!-- 默认控制器root -->
+    <root>
+        <priority value ="info"/>
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="ALL-FILE" />
+        <appender-ref ref="ERROR-FILE" />
+    </root>
+
+</log4j:configuration>
